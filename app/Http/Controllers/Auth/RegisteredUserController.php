@@ -41,6 +41,21 @@ class RegisteredUserController extends Controller
             'password' => ['required', 'confirmed', Rules\Password::defaults()],
         ]);
 
+        $uploadFile = '';
+        if ($request->hasFile('image')) {
+            $filenameOrg = $request->file('image')->getClientOriginalName();
+
+            $filename = pathinfo($filenameOrg, PATHINFO_FILENAME);
+
+            $extension = $request->file('image')->getClientOriginalExtension();
+
+            $uploadFile = $filename . '_' . time() . '.' . $extension;
+
+            $request->file('image')->move('/public/images' . $uploadFile);
+        } else {
+            $uploadFile = 'noimage.jpg';
+        }
+
         $dob = $request->dob;
         $role = isset($request->role) && !empty($request->role) ? 1 : 0;
 
@@ -49,6 +64,7 @@ class RegisteredUserController extends Controller
             'last_name' => $request->last_name,
             'dob' => $dob,
             'email' => $request->email,
+            'image' => $uploadFile,
             'role' => $role,
             'password' => Hash::make($request->password),
         ];

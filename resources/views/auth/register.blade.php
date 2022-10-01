@@ -14,9 +14,27 @@
 
             <!-- Name -->
             <div>
-                <x-label for="name" :value="__('Name')" />
+                <x-label for="first_name" :value="__('First Name')" />
 
-                <x-input id="name" class="block mt-1 w-full" type="text" name="name" :value="old('name')" required autofocus />
+                <x-input id="first_name" class="block mt-1 w-full" type="text" name="first_name" :value="old('first_name')" required autofocus />
+            </div>
+
+            <div class="mt-4">
+                <x-label for="last_name" :value="__('Last Name')" />
+
+                <x-input id="last_name" class="block mt-1 w-full" type="text" name="last_name" :value="old('last_name')" required autofocus />
+            </div>
+
+            <div class="mt-4">
+                <x-label for="dob" :value="__('DOB')" />
+
+                <x-input id="dob" class="block mt-1 w-full" type="date" name="dob" :value="old('dob')" required autofocus />
+            </div>
+
+            <div class="mt-4">
+                <x-label for="image" :value="__('Image')" />
+
+                <x-input id="image" class="block mt-1 w-full" type="file" name="image" :value="old('image')" required autofocus />
             </div>
 
             <!-- Email Address -->
@@ -43,6 +61,12 @@
                 <x-input id="password_confirmation" class="block mt-1 w-full"
                                 type="password"
                                 name="password_confirmation" required />
+            </div>
+
+            <div class="mt-4">
+                <x-label for="role" :value="__('Is Admin')" />
+
+                <x-input id="role" class="block mt-1" type="checkbox" name="role" :value="old('role')" required />
             </div>
 
             <div class="flex items-center justify-end mt-4">

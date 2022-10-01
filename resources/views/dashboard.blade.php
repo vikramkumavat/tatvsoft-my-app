@@ -56,6 +56,13 @@
                         <td>{{ $blog['first_name'] }}</td>
                         <td>
                             <a href="blog/edit/{{ $blog['id'] }}" class="badge badge-primary">Edit</a>
+
+                            <form method="POST" action="{{ route('blog.delete') }}">
+                                @csrf
+                                <input type="hidden" name="id" value="{{ $blog['id'] }}">
+                                <input type="submit" class="btn btn-danger" value="Delete" onclick="event.preventDefault();
+                                this.closest('form').submit();">
+                            </form>
                         </td>
                     </tr>
                 @endforeach

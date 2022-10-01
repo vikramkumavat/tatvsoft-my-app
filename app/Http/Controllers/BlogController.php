@@ -109,17 +109,12 @@ class BlogController extends Controller
             $rules['user_id'] = ['required'];
             $user_id = $request->user_id;
         }
-
         $request->validate($rules);
         $data = [
             'title' => $request->title,
             'body' => $request->body,
             'user_id' => $request->user_id,
         ];
-        // return $request->id;
-        // return Blog::where('id', '=', $request->id)->get();
-        // $blog = Blog::where('id', $request->id);
-        // dd($blog);
         $updateBlog = Blog::where('id', '=', $request->id)->update($data);
         if ($updateBlog) {
             return redirect()->route('dashboard')->with('success', 'Blog Updated');
@@ -133,8 +128,16 @@ class BlogController extends Controller
      * @param  \App\Models\Blog  $blog
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Blog $blog)
+    public function delete(Request $request)
     {
-        //
+        $id = $request->id;
+        $blog = Blog::find($id);
+        if (!Auth::user()->role || Auth::user()->id != $blog->user_id) {
+            return redirect()->back()->with('error', 'Unauthorized request');
+        }
+        if ($blog->delete()) {
+            return redirect()->route('dashboard')->with('success', 'Blog Deleted');
+        }
+        return redirect()->back()->with('error', 'Oops something went wrong.');
     }
 }

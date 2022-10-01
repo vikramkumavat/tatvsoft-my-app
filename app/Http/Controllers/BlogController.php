@@ -113,7 +113,7 @@ class BlogController extends Controller
         $data = [
             'title' => $request->title,
             'body' => $request->body,
-            'user_id' => $request->user_id,
+            'user_id' => $user_id,
         ];
         $updateBlog = Blog::where('id', '=', $request->id)->update($data);
         if ($updateBlog) {
@@ -132,8 +132,10 @@ class BlogController extends Controller
     {
         $id = $request->id;
         $blog = Blog::find($id);
-        if (!Auth::user()->role || Auth::user()->id != $blog->user_id) {
-            return redirect()->back()->with('error', 'Unauthorized request');
+        if (!Auth::user()->role) {
+            if (Auth::user()->id != $blog->user_id) {
+                return redirect()->back()->with('error', 'Unauthorized request');
+            }
         }
         if ($blog->delete()) {
             return redirect()->route('dashboard')->with('success', 'Blog Deleted');

@@ -11,6 +11,11 @@ class DashboardController extends Controller
 {
     public function index()
     {
+        $blogs = Blog::with('user')->orderBy('created_at', 'desc')->get()->toArray();
+        return view('welcome')->with(['blogs' => $blogs]);
+    }
+    public function dashboard()
+    {
 
         /* I am facing issue here to combine logic that's why i use two diff syntex */
         if (Auth::user()->role) {

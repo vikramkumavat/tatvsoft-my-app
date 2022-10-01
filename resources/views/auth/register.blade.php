@@ -34,7 +34,7 @@
             <div class="mt-4">
                 <x-label for="image" :value="__('Image')" />
 
-                <x-input id="image" class="block mt-1 w-full" type="file" name="image" :value="old('image')" required autofocus />
+                <x-input id="image" class="block mt-1 w-full" type="file" name="image" :value="old('image')" autofocus />
             </div>
 
             <!-- Email Address -->
@@ -66,7 +66,7 @@
             <div class="mt-4">
                 <x-label for="role" :value="__('Is Admin')" />
 
-                <x-input id="role" class="block mt-1" type="checkbox" name="role" :value="old('role')" required />
+                <x-input id="role" class="block mt-1" type="checkbox" name="role" :value="old('role')" />
             </div>
 
             <div class="flex items-center justify-end mt-4">

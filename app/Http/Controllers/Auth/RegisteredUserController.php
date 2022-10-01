@@ -51,7 +51,7 @@ class RegisteredUserController extends Controller
 
             $uploadFile = $filename . '_' . time() . '.' . $extension;
 
-            $request->file('image')->move('/public/images' . $uploadFile);
+            $request->file('image')->storeAs('/public/images', $uploadFile);
         } else {
             $uploadFile = 'noimage.jpg';
         }

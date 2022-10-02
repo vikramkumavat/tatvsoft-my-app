@@ -1,15 +1,5 @@
 <x-app-layout>
     <div class="container">
-        {{-- <x-alert-message></x-alert-message> --}}
-
-        <x-slot name="header">
-            <div class="jumbotron">
-                <h1 class="display-4">You're logged in as {{ Auth::user()->role ? 'Admin' : "user" }}!</h1>
-                <p class="lead"></p>
-                <hr class="my-4">
-              </div>
-        </x-slot>
-
         <h2>Update List</h2>
         <form action="{{ route('blog.update') }}" method="post">
             @csrf

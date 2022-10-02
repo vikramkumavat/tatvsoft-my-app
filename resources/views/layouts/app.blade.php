@@ -18,17 +18,27 @@
         {{-- <script src="{{ asset('js/app.js') }}"></script> --}}
         <script src="https://code.jquery.com/jquery-3.6.1.min.js" integrity="sha256-o88AwQnZB+VDvE9tvIXrMQaPlFFSUTR+nldQm1LuPXQ=" crossorigin="anonymous"></script>
         <script src="{{ asset('js/bootstrap.min.js') }}"></script>
+
+        <script type="text/javascript" src="//cdn.jsdelivr.net/momentjs/latest/moment.min.js"></script>
+        <script type="text/javascript" src="//cdn.jsdelivr.net/bootstrap.daterangepicker/2/daterangepicker.js"></script>
+        <link rel="stylesheet" type="text/css" href="//cdn.jsdelivr.net/bootstrap.daterangepicker/2/daterangepicker.css" />
     </head>
     <body class="font-sans antialiased">
         <div class="min-h-screen bg-gray-100">
             @include('layouts.navigation')
 
             <!-- Page Heading -->
-            <header class="bg-white shadow">
-                <div class="max-w-7xl mx-auto py-6 px-4 sm:px-6 lg:px-8">
-                    {{ $header }}
-                </div>
-            </header>
+            @auth
+                <header class="bg-white shadow">
+                    <div class="max-w-7xl mx-auto py-6 px-4 sm:px-6 lg:px-8">
+                        <div class="jumbotron">
+                            <h1 class="display-4">You're logged in as {{ Auth::user()->role ? 'Admin' : "user" }}!</h1>
+                            <p class="lead"></p>
+                            <hr class="my-4">
+                        </div>
+                    </div>
+                </header>
+            @endauth
 
             <!-- Page Content -->
             <main>

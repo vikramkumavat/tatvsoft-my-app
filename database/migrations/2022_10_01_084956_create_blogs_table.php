@@ -18,6 +18,10 @@ class CreateBlogsTable extends Migration
             $table->string('title', 250)->nullable();
             $table->string('body', 500)->nullable();
             $table->string('user_id', 500)->nullable();
+            // $table->string('image')->nullable();
+            $table->timestamp('start_date')->nullable();
+            $table->timestamp('end_date')->nullable();
+            $table->string('active', 1)->default(1);
             $table->softDeletes();
             $table->timestamps();
         });

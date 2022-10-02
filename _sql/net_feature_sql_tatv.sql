@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Oct 01, 2022 at 01:23 PM
+-- Generation Time: Oct 02, 2022 at 03:46 PM
 -- Server version: 10.4.17-MariaDB
 -- PHP Version: 7.4.13
 
@@ -32,6 +32,9 @@ CREATE TABLE `blogs` (
   `title` varchar(250) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `body` varchar(500) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `user_id` varchar(500) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `start_date` timestamp NULL DEFAULT NULL,
+  `end_date` timestamp NULL DEFAULT NULL,
+  `active` varchar(1) COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '1',
   `deleted_at` timestamp NULL DEFAULT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL
@@ -41,13 +44,12 @@ CREATE TABLE `blogs` (
 -- Dumping data for table `blogs`
 --
 
-INSERT INTO `blogs` (`id`, `title`, `body`, `user_id`, `deleted_at`, `created_at`, `updated_at`) VALUES
-(1, 'Blog 1', 'This is the test blog content.', '2', NULL, '2022-10-01 03:39:26', '2022-10-01 03:39:26'),
-(2, 'blog 2', 'this is the blog 2 content', '1', NULL, '2022-10-01 03:41:43', '2022-10-01 03:41:43'),
-(3, 'Blog 134', 'This is the test blog content.', '2', '2022-10-01 05:36:56', '2022-10-01 04:44:03', '2022-10-01 05:36:56'),
-(4, 'Blog 122', 'This is the test blog content.', '2', '2022-10-01 05:17:34', '2022-10-01 04:44:39', '2022-10-01 05:17:34'),
-(5, 'Blog 1223', 'This is the test blog content.', '2', '2022-10-01 05:17:29', '2022-10-01 04:45:45', '2022-10-01 05:17:29'),
-(6, 'Blog 444444454', 'This is the test blog content.', '2', '2022-10-01 05:16:35', '2022-10-01 04:47:20', '2022-10-01 05:16:35');
+INSERT INTO `blogs` (`id`, `title`, `body`, `user_id`, `start_date`, `end_date`, `active`, `deleted_at`, `created_at`, `updated_at`) VALUES
+(1, 'test', 'this will need to do at 4:30 PM before at time.', '2', '2022-11-14 18:30:00', '2022-11-17 18:30:00', '1', NULL, '2022-10-02 07:36:42', '2022-10-02 07:36:42'),
+(2, 'Blog 122355', 'this will need to do at 4:30 PM before at time.', '2', '2022-09-30 18:30:00', '2022-10-18 18:30:00', '1', NULL, '2022-10-02 07:36:57', '2022-10-02 07:36:57'),
+(3, 'Blog 12', 'this is the blog 2 content', '2', '2022-09-30 18:30:00', '2022-10-04 18:30:00', '0', NULL, '2022-10-02 07:44:35', '2022-10-02 07:44:35'),
+(4, 'Blog 12', 'This task for next friday please add to this in your task list.', '1', '2022-09-30 18:30:00', '2022-10-03 18:30:00', '1', NULL, '2022-10-02 07:45:29', '2022-10-02 07:45:29'),
+(5, 'Blog 12kjfh', 'fdh dsajhgdsf dfmgjdsf dfjg', '1', '2022-10-01 13:29:14', '2022-10-10 18:30:00', '1', NULL, '2022-10-02 07:45:49', '2022-10-02 07:45:49');
 
 -- --------------------------------------------------------
 
@@ -64,6 +66,32 @@ CREATE TABLE `failed_jobs` (
   `exception` longtext COLLATE utf8mb4_unicode_ci NOT NULL,
   `failed_at` timestamp NOT NULL DEFAULT current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `images`
+--
+
+CREATE TABLE `images` (
+  `id` bigint(20) UNSIGNED NOT NULL,
+  `url` varchar(500) COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT 'noimage.jpg',
+  `imageable_id` int(11) NOT NULL,
+  `imageable_type` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Dumping data for table `images`
+--
+
+INSERT INTO `images` (`id`, `url`, `imageable_id`, `imageable_type`, `created_at`, `updated_at`) VALUES
+(1, 'icon-5359553_1280_1664703738.webp', 1, 'App\\Models\\User', '2022-10-02 04:12:18', '2022-10-02 04:12:18'),
+(2, 'noimage.jpg', 2, 'App\\Models\\User', '2022-10-02 07:36:10', '2022-10-02 07:36:10'),
+(3, 'index_1664716002.jpg', 1, 'App\\Models\\Blog', '2022-10-02 07:36:42', '2022-10-02 07:36:42'),
+(4, 'index_1664716529.jpg', 4, 'App\\Models\\Blog', '2022-10-02 07:45:29', '2022-10-02 07:45:29'),
+(5, 'index_1664716549.jpg', 5, 'App\\Models\\Blog', '2022-10-02 07:45:49', '2022-10-02 07:45:49');
 
 -- --------------------------------------------------------
 
@@ -86,7 +114,8 @@ INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES
 (2, '2014_10_12_100000_create_password_resets_table', 1),
 (3, '2019_08_19_000000_create_failed_jobs_table', 1),
 (4, '2019_12_14_000001_create_personal_access_tokens_table', 1),
-(6, '2022_10_01_084956_create_blogs_table', 2);
+(5, '2022_10_01_084956_create_blogs_table', 1),
+(6, '2022_10_02_073134_create_images_table', 1);
 
 -- --------------------------------------------------------
 
@@ -129,7 +158,6 @@ CREATE TABLE `users` (
   `first_name` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
   `last_name` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
   `dob` timestamp NULL DEFAULT NULL,
-  `image` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `role` varchar(1) COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '0',
   `email` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
   `email_verified_at` timestamp NULL DEFAULT NULL,
@@ -143,11 +171,9 @@ CREATE TABLE `users` (
 -- Dumping data for table `users`
 --
 
-INSERT INTO `users` (`id`, `first_name`, `last_name`, `dob`, `image`, `role`, `email`, `email_verified_at`, `password`, `remember_token`, `created_at`, `updated_at`) VALUES
-(1, 'vikram', 'kumavat', '2022-11-16 18:30:00', NULL, '1', 'kumavatvikram42@gmail.com', NULL, '$2y$10$BHEgTpQ/sUgtxkUY7WTmTuOz5DJTJD/5seq3WfUqA.XKRky0sPhmq', NULL, '2022-10-01 02:33:46', '2022-10-01 02:33:46'),
-(2, 'test', '123', '2022-12-13 18:30:00', NULL, '0', 'test@gmail.com', NULL, '$2y$10$cMI1GBIzw3sV3YGtArLSe.yulfFafS7mamaRFiDZI7YZ/7OzJRMVG', NULL, '2022-10-01 03:05:37', '2022-10-01 03:05:37'),
-(3, 'vikram', 'kumavat', '2022-10-20 18:30:00', 'noimage.jpg', '0', 'test2@gmail.com', NULL, '$2y$10$Dwo3b8VvCtUqNbhVILHOa.uydI3JrWyfIRGF7og1UEuTwqn2F5NYS', NULL, '2022-10-01 05:45:54', '2022-10-01 05:45:54'),
-(4, 'test 2', '2', '2022-10-18 18:30:00', 'index_1664623320.jpg', '0', 'test2@gamil.com', NULL, '$2y$10$AN.66WzRjMCA77WnOZ9nF.lynuo.er2d/tWGizeIvsLvn8Kez3If6', NULL, '2022-10-01 05:52:00', '2022-10-01 05:52:00');
+INSERT INTO `users` (`id`, `first_name`, `last_name`, `dob`, `role`, `email`, `email_verified_at`, `password`, `remember_token`, `created_at`, `updated_at`) VALUES
+(1, 'vikram', 'kumavat', '2022-10-12 18:30:00', '1', 'kumavatvikram42@gmail.com', NULL, '$2y$10$bHStkz9NR5KCdh3QKYDn1.GIykNk0/OQQ/xjxc//E9kR7q74UxGze', NULL, '2022-10-02 04:12:18', '2022-10-02 04:12:18'),
+(2, 'test', '1', '2022-10-12 18:30:00', '0', 'test@gmail.com', NULL, '$2y$10$EbpnV9C01l9Si6L12Ue7Be3Z0N7zfTlyemXwf5eDMPjuuFm8lNzNS', NULL, '2022-10-02 07:36:10', '2022-10-02 07:36:10');
 
 --
 -- Indexes for dumped tables
@@ -165,6 +191,12 @@ ALTER TABLE `blogs`
 ALTER TABLE `failed_jobs`
   ADD PRIMARY KEY (`id`),
   ADD UNIQUE KEY `failed_jobs_uuid_unique` (`uuid`);
+
+--
+-- Indexes for table `images`
+--
+ALTER TABLE `images`
+  ADD PRIMARY KEY (`id`);
 
 --
 -- Indexes for table `migrations`
@@ -201,13 +233,19 @@ ALTER TABLE `users`
 -- AUTO_INCREMENT for table `blogs`
 --
 ALTER TABLE `blogs`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
 
 --
 -- AUTO_INCREMENT for table `failed_jobs`
 --
 ALTER TABLE `failed_jobs`
   MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT for table `images`
+--
+ALTER TABLE `images`
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
 
 --
 -- AUTO_INCREMENT for table `migrations`
@@ -225,7 +263,7 @@ ALTER TABLE `personal_access_tokens`
 -- AUTO_INCREMENT for table `users`
 --
 ALTER TABLE `users`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;

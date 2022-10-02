@@ -39,6 +39,7 @@ class RegisteredUserController extends Controller
             'dob' => ['required'],
             'email' => ['required', 'string', 'email', 'max:255', 'unique:users'],
             'password' => ['required', 'confirmed', Rules\Password::defaults()],
+            'image' => 'mimes:jpeg,jpg,png|required|max:10000',
         ]);
 
         $uploadFile = '';
@@ -64,11 +65,17 @@ class RegisteredUserController extends Controller
             'last_name' => $request->last_name,
             'dob' => $dob,
             'email' => $request->email,
-            'image' => $uploadFile,
+            // 'image' => $uploadFile,
             'role' => $role,
             'password' => Hash::make($request->password),
         ];
         $user = User::create($userData);
+
+        if ($user) {
+            $user->image()->create([
+                'url' => $uploadFile,
+            ]);
+        }
 
         event(new Registered($user));
 

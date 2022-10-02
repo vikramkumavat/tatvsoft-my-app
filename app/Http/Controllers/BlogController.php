@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Blog;
+use App\Models\Image;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -40,9 +41,35 @@ class BlogController extends Controller
         $rules = [
             'title' => ['required', 'string', 'max:250'],
             'body' => ['required', 'string', 'max:500'],
+            'date' => ['required', 'string'],
+            'image' => 'mimes:jpeg,jpg,png|required|max:10000',
         ];
+
+        $uploadFile = '';
+        if ($request->hasFile('image')) {
+            $filenameOrg = $request->file('image')->getClientOriginalName();
+
+            $filename = pathinfo($filenameOrg, PATHINFO_FILENAME);
+
+            $extension = $request->file('image')->getClientOriginalExtension();
+
+            $uploadFile = $filename . '_' . time() . '.' . $extension;
+
+            $request->file('image')->storeAs('/public/images', $uploadFile);
+        } else {
+            $uploadFile = 'noimage.jpg';
+        }
+
+        // return $uploadFile;
+
+        list($stDate, $endDate) = explode(' - ', $request->date);
+
+        $stDate = date("Y-m-d", strtotime($stDate));
+        $endDate = date("Y-m-d", strtotime($endDate));
+
+        $active = isset($request->blogactive) && !empty($request->blogactive) ? 1 : 0;
         $user_id = Auth::user()->id;
-        if (Auth::user()->role) {
+        if (Auth::user()->role && !empty($request->user_id)) {
             $rules['user_id'] = ['required'];
             $user_id = $request->user_id;
         }
@@ -53,7 +80,16 @@ class BlogController extends Controller
         $blog->title = trim($request->title);
         $blog->body = trim($request->body);
         $blog->user_id = $user_id;
+        $blog->start_date = $stDate ?? null;
+        $blog->end_date = $endDate ?? null;
+        $blog->active = $active;
         if ($blog->save()) {
+            if ($request->hasFile('image')) {
+                $blog->image()->create([
+                    'url' => $uploadFile
+                ]);
+            }
+
             return redirect()->back()->with('success', 'Blog added');
         }
         return redirect()->back()->with('error', 'Oops something went wrong.');

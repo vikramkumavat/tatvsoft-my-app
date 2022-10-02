@@ -21,8 +21,24 @@ class Blog extends Model
         return $this->belongsTo(User::class, 'user_id', 'id');
     }
 
+    public function image()
+    {
+        return $this->morphOne(Image::class, 'imageable');
+    }
+
     public function getRouteKeyName()
     {
         return 'id';
+    }
+
+    public function scopeActive($query)
+    {
+        $query = $query->where('active', '=', 1);
+    }
+
+    public function scopeNotexpired($query)
+    {
+        $date = date("Y-m-d");
+        $query = $query->where('start_date', '<=', $date)->where('end_date', '>=', $date);
     }
 }

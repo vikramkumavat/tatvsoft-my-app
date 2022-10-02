@@ -16,19 +16,41 @@
         </ul>
     </div>
 
-    <div class="dropdown pr-5 mr-3">
-        <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-            {{ Auth::user()->first_name }}
-        </button>
-        <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-            <form method="POST" action="{{ route('logout') }}">
-                @csrf
-                <x-dropdown-link :href="route('logout')"
-                        onclick="event.preventDefault();
-                                    this.closest('form').submit();">
-                    {{ __('Log Out') }}
-                </x-dropdown-link>
-            </form>
+    @auth
+        <ul class="nav">
+            @php
+                $pimage = !empty(Auth::user()->image->url) ? Auth::user()->image->url : 'noimage.png';
+            @endphp
+            <li class="nav-item">
+                <img class="nav-link" src="{{ URL::to('/storage/images/'.$pimage) }}" width="5%" alt="{{ $pimage }}">
+            </li>
+        </ul>
+        <div class="dropdown pr-5 mr-3">
+            <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                {{ Auth::user()->first_name }}
+            </button>
+            <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                <form method="POST" action="{{ route('logout') }}">
+                    @csrf
+                    <x-dropdown-link :href="route('logout')"
+                            onclick="event.preventDefault();
+                                        this.closest('form').submit();">
+                        {{ __('Log Out') }}
+                    </x-dropdown-link>
+                </form>
+            </div>
         </div>
-      </div>
+    @else
+        <ul class="nav">
+            <li class="nav-item">
+                <a class="nav-link" href="{{ route('login') }}">Log in</a>
+            </li>
+            @if (Route::has('register'))
+                <li class="nav-item">
+                    <a class="nav-link" href="{{ route('register') }}">Register</a>
+                </li>
+            @endif
+        </ul>
+    @endauth
+
 </nav>

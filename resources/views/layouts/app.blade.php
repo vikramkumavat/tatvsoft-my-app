@@ -59,6 +59,13 @@
                 </div>
             </footer>
 
+            <script>
+                $.validator.addMethod('filesize', function (value, element, param) {
+                    /* this.optional(element) */
+                    return (element.files[0].size <= param * 1000000)
+                }, 'File size must be less than {0} MB');
+            </script>
+
         </div>
     </body>
 </html>

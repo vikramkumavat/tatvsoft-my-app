@@ -3,17 +3,22 @@
 
         <x-alert-message></x-alert-message>
 
+        <x-dropdown-link href="{{ route('dashboard') }}"
+        class="btn btn-info">
+            Back
+        </x-dropdown-link>
+        <hr>
         <h2>Create List</h2>
-        <form action="{{ route('blog.store') }}" method="post" enctype="multipart/form-data">
+        <form action="{{ route('blog.store') }}" method="post" name="blogform" id="blogform" enctype="multipart/form-data">
             @csrf
             <input type="hidden" name="id" value="{{ $blog->id??'' }}">
             <div class="form-group">
                 <label for="title">Blog Title</label>
-                <input type="text" name="title" maxlength="250" class="form-control" id="title" value="{{ $blog->title??'' }}" placeholder="Enter Blog Title" autofocus>
+                <input type="text" id="title" name="title" maxlength="250" class="form-control" id="title" value="{{ $blog->title??'' }}" placeholder="Enter Blog Title" autofocus>
             </div>
             <div class="form-group">
                 <label for="body">Blog Body</label>
-                <input type="text" name="body" maxlength="500" class="form-control" id="body" value="{{ $blog->body??'' }}" placeholder="Enter Blog Body">
+                <input type="text" id="body" name="body" maxlength="500" class="form-control" id="body" value="{{ $blog->body??'' }}" placeholder="Enter Blog Body">
             </div>
             <div class="form-group">
                 <?php
@@ -56,6 +61,31 @@
             @endif
             <button type="submit" class="btn btn-primary">Submit</button>
         </form>
+        <script>
+            $(function(){
+                $("#blogform").validate({
+                    rules: {
+                        title: "required",
+                        body: "required",
+                        date: "required",
+                        image: {
+                            required: true,
+                            filesize : 1,
+                        },
+                    },
+                    messages: {
+                        title: "This blog title is required.",
+                        body: "This blog body is required.",
+                        date: "This blog date is required.",
+                        image: {
+                            required: "This blog is required.",
+                        }
+                    }
+
+                });
+
+            });
+        </script>
     </div>
 
     <br>

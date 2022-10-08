@@ -13,15 +13,16 @@
         <!-- Styles -->
         {{-- <link rel="stylesheet" href="{{ asset('css/app.css') }}"> --}}
         <link rel="stylesheet" href="{{ asset('css/bootstrap.min.css') }}">
+        <link rel="stylesheet" type="text/css" href="{{ asset('css/daterangepicker.css') }}" />
 
         <!-- Scripts -->
         {{-- <script src="{{ asset('js/app.js') }}"></script> --}}
-        <script src="https://code.jquery.com/jquery-3.6.1.min.js" integrity="sha256-o88AwQnZB+VDvE9tvIXrMQaPlFFSUTR+nldQm1LuPXQ=" crossorigin="anonymous"></script>
+        <script src="{{ asset('js/jquery-3.6.1.min.js') }}"></script>
         <script src="{{ asset('js/bootstrap.min.js') }}"></script>
+        <script src="{{ asset('js/moment.min.js') }}"></script>
+        <script src="{{ asset('js/daterangepicker.js') }}"></script>
+        <script src="{{ asset('js/jquery.validate.min.js') }}"></script>
 
-        <script type="text/javascript" src="//cdn.jsdelivr.net/momentjs/latest/moment.min.js"></script>
-        <script type="text/javascript" src="//cdn.jsdelivr.net/bootstrap.daterangepicker/2/daterangepicker.js"></script>
-        <link rel="stylesheet" type="text/css" href="//cdn.jsdelivr.net/bootstrap.daterangepicker/2/daterangepicker.css" />
     </head>
     <body class="font-sans antialiased">
         <div class="min-h-screen bg-gray-100">
@@ -41,9 +42,30 @@
             @endauth
 
             <!-- Page Content -->
-            <main>
+            <main class="album py-5 bg-light">
                 {{ $slot }}
             </main>
+
+            <footer class="text-muted py-4">
+                <div class="container">
+                    <p class="float-right">
+                        <a href="#">Back to top</a>
+                    </p>
+                    <p class="float-left">
+                        <a href="{{ route('blog.create') }}">Add Blog</a>
+                    </p>
+                    <div class="clearfix"></div>
+                    <p>Album example is © {{ date('Y') }} Xyz.</p>
+                </div>
+            </footer>
+
+            <script>
+                $.validator.addMethod('filesize', function (value, element, param) {
+                    /* this.optional(element) */
+                    return (element.files[0].size <= param * 1000000)
+                }, 'File size must be less than {0} MB');
+            </script>
+
         </div>
     </body>
 </html>

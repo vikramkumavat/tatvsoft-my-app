@@ -42,9 +42,23 @@
             @endauth
 
             <!-- Page Content -->
-            <main>
+            <main class="album py-5 bg-light">
                 {{ $slot }}
             </main>
+
+            <footer class="text-muted py-4">
+                <div class="container">
+                    <p class="float-right">
+                        <a href="#">Back to top</a>
+                    </p>
+                    <p class="float-left">
+                        <a href="{{ route('blog.create') }}">Add Blog</a>
+                    </p>
+                    <div class="clearfix"></div>
+                    <p>Album example is © {{ date('Y') }} Xyz.</p>
+                </div>
+            </footer>
+
         </div>
     </body>
 </html>

@@ -66,7 +66,7 @@
             <div class="mt-4">
                 <x-label for="role" :value="__('Is Admin')" />
 
-                <x-input id="role" class="block mt-1" type="checkbox" name="role" :value="old('role')" />
+                <x-input id="role" class="block mt-1" type="checkbox" name="role" :value="old('role')" :checked="false" />
             </div>
 
             <div class="flex items-center justify-end mt-4">

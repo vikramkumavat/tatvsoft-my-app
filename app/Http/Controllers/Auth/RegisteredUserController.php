@@ -39,7 +39,7 @@ class RegisteredUserController extends Controller
             'dob' => ['required'],
             'email' => ['required', 'string', 'email', 'max:255', 'unique:users'],
             'password' => ['required', 'confirmed', Rules\Password::defaults()],
-            'image' => 'mimes:jpeg,jpg,png|required|max:10000',
+            'image' => 'mimes:jpeg,jpg,png,webp|max:10000',
         ]);
 
         $uploadFile = '';

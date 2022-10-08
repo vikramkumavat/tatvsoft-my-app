@@ -7,6 +7,7 @@ use App\Models\Image;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Validation\UnauthorizedException;
 
 class BlogController extends Controller
@@ -96,6 +97,8 @@ class BlogController extends Controller
                 ];
 
                 if (isset($request->id) && !empty($request->id)) {
+                    // Delete file if exists
+                    Storage::delete('/public/images/' . $existBlog->image->url);
                     $existBlog->image()->update($imageData);
                 } else {
                     $blog->image()->create($imageData);
@@ -143,6 +146,7 @@ class BlogController extends Controller
             }
         }
         if ($blog->delete()) {
+            Storage::delete('/public/images/' . $blog->image->url);
             return redirect()->route('dashboard')->with('success', 'Blog Deleted');
         }
         return redirect()->back()->with('error', 'Oops something went wrong.');

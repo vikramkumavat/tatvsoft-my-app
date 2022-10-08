@@ -14,6 +14,9 @@ class Blog extends Model
         'title',
         'body',
         'user_id',
+        'start_date',
+        'end_date',
+        'active',
     ];
 
     public function user()

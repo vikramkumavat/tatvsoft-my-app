@@ -77,16 +77,19 @@ class BlogController extends Controller
             "title"         => trim($request->title),
             "body"          => trim($request->body),
             "user_id"       => $user_id,
-            "start_date"    => $stDate ?? null,
-            "end_date"      => $endDate ?? null,
+            "start_date"    => $stDate,
+            "end_date"      => $endDate,
             "active"        => $active,
         ];
-        $existBlog = Blog::find($request->id);
+        $existBlog = false;
+        if (isset($request->id) && !empty($request->id)) {
+            $existBlog = Blog::find($request->id);
+        }
         if (!$existBlog && $request->id) {
             return redirect()->back()->with('error', "Oops something went wrong blog doesn't exist.");
         }
         if ($existBlog) {
-            $blog = Blog::where('id', '=', $request->id)->update($data);
+            $blog = Blog::whereId($request->id)->update($data);
         } else {
             $blog = Blog::create($data);
         }

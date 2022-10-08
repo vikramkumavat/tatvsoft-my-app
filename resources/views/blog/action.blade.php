@@ -25,8 +25,8 @@
                     $stDate = isset($blog->start_date) ? date("m/d/Y", strtotime($blog->start_date)) : '';
                     $endDate = isset($blog->end_date) ? date("m/d/Y", strtotime($blog->end_date)) : '';
                 ?>
-                <x-label for="date" :value="__('Start Date')" />
-                <x-input id="date" class="form-control" type="text" name="date" :value="(isset($stDate) && isset($endDate)) ? ($stDate .' - '. $endDate) :old('date')" required />
+                <x-label for="date" :value="__('Date Range')" />
+                <x-input id="date" class="form-control" type="text" name="date" :value="(!empty($stDate) && !empty($endDate)) ? ($stDate .' - '. $endDate) :''" required />
             </div>
             <div class="form-group">
                 @if (!isset($blog))
@@ -47,7 +47,11 @@
                 <x-label for="blogactive" :value="__('Blog Active')" />
                 <x-input id="blogactive" class="block mt-1" type="checkbox" name="blogactive" :value="old('blogactive')" :checked="isset($blog->active) && empty($blog->active)?'':'checked'" />
             </div>
-            <script>$('input[name="date"]').daterangepicker();</script>
+            <script>
+                $(function(){
+                    $('input[name="date"]').daterangepicker();
+                });
+            </script>
             @if (Auth::user()->role)
                 <div class="form-group">
                     <label for="Assign">Select User</label>
@@ -69,7 +73,6 @@
                         body: "required",
                         date: "required",
                         image: {
-                            required: true,
                             filesize : 1,
                         },
                     },
@@ -77,9 +80,6 @@
                         title: "This blog title is required.",
                         body: "This blog body is required.",
                         date: "This blog date is required.",
-                        image: {
-                            required: "This blog is required.",
-                        }
                     }
 
                 });

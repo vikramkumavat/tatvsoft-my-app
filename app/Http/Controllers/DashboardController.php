@@ -22,7 +22,7 @@ class DashboardController extends Controller
     {
 
         /* I am facing issue here to combine logic that's why i use two diff syntex */
-        $blogs = Blog::with('image')->select('blogs.id', 'blogs.title', 'blogs.body', 'blogs.user_id', 'u.first_name')->leftJoin('users as u', 'blogs.user_id', '=', 'u.id');
+        $blogs = Blog::with('image')->select('blogs.id', 'blogs.title', 'blogs.body', 'blogs.user_id', 'blogs.active', 'u.first_name')->leftJoin('users as u', 'blogs.user_id', '=', 'u.id');
         if (!Auth::user()->role) {
             $blogs->where('user_id', '=', Auth::user()->id);
             $blogs->active()->notexpired();

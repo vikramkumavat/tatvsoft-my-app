@@ -7,18 +7,10 @@ use App\Models\Image;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Validation\UnauthorizedException;
 
 class BlogController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function index()
-    {
-        //
-    }
 
     /**
      * Show the form for creating a new resource.
@@ -27,7 +19,11 @@ class BlogController extends Controller
      */
     public function create()
     {
-        //
+        $data = [];
+        if (Auth::user()->role) {
+            $data['users'] = User::select('id', 'first_name', 'last_name')->where('role', '!=', '1')->get()->toArray();
+        }
+        return view('blog.action')->with($data);
     }
 
     /**
@@ -38,11 +34,12 @@ class BlogController extends Controller
      */
     public function store(Request $request)
     {
+        // return $request;
         $rules = [
             'title' => ['required', 'string', 'max:250'],
             'body' => ['required', 'string', 'max:500'],
             'date' => ['required', 'string'],
-            'image' => 'mimes:jpeg,jpg,png|required|max:10000',
+            'image' => 'mimes:jpeg,jpg,png|max:10000',
         ];
 
         $uploadFile = '';
@@ -75,35 +72,38 @@ class BlogController extends Controller
         }
 
         $request->validate($rules);
-
-        $blog = new Blog;
-        $blog->title = trim($request->title);
-        $blog->body = trim($request->body);
-        $blog->user_id = $user_id;
-        $blog->start_date = $stDate ?? null;
-        $blog->end_date = $endDate ?? null;
-        $blog->active = $active;
-        if ($blog->save()) {
+        $data = [
+            "title"         => trim($request->title),
+            "body"          => trim($request->body),
+            "user_id"       => $user_id,
+            "start_date"    => $stDate ?? null,
+            "end_date"      => $endDate ?? null,
+            "active"        => $active,
+        ];
+        $existBlog = Blog::find($request->id);
+        if (!$existBlog && $request->id) {
+            return redirect()->back()->with('error', "Oops something went wrong blog doesn't exist.");
+        }
+        if ($existBlog) {
+            $blog = Blog::where('id', '=', $request->id)->update($data);
+        } else {
+            $blog = Blog::create($data);
+        }
+        if ($blog) {
             if ($request->hasFile('image')) {
-                $blog->image()->create([
+                $imageData = [
                     'url' => $uploadFile
-                ]);
-            }
+                ];
 
-            return redirect()->back()->with('success', 'Blog added');
+                if (isset($request->id) && !empty($request->id)) {
+                    $existBlog->image()->update($imageData);
+                } else {
+                    $blog->image()->create($imageData);
+                }
+            }
+            return redirect()->route('dashboard')->with('success', 'Blog added');
         }
         return redirect()->back()->with('error', 'Oops something went wrong.');
-    }
-
-    /**
-     * Display the specified resource.
-     *
-     * @param  \App\Models\Blog  $blog
-     * @return \Illuminate\Http\Response
-     */
-    public function show(Blog $blog)
-    {
-        //
     }
 
     /**
@@ -124,38 +124,7 @@ class BlogController extends Controller
         } else {
             $data['users'] = User::select('id', 'first_name', 'last_name')->where('role', '!=', '1')->get()->toArray();
         }
-        return view('blog.edit')->with($data);
-    }
-
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Models\Blog  $blog
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request)
-    {
-        $rules = [
-            'title' => ['required', 'string', 'max:250'],
-            'body' => ['required', 'string', 'max:500'],
-        ];
-        $user_id = Auth::user()->id;
-        if (Auth::user()->role) {
-            $rules['user_id'] = ['required'];
-            $user_id = $request->user_id;
-        }
-        $request->validate($rules);
-        $data = [
-            'title' => $request->title,
-            'body' => $request->body,
-            'user_id' => $user_id,
-        ];
-        $updateBlog = Blog::where('id', '=', $request->id)->update($data);
-        if ($updateBlog) {
-            return redirect()->route('dashboard')->with('success', 'Blog Updated');
-        }
-        return redirect()->back()->with('error', 'Oops something went wrong.');
+        return view('blog.action')->with($data);
     }
 
     /**
